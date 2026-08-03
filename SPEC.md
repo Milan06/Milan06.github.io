@@ -133,12 +133,12 @@ Before writing any code, do a **content audit** (this is the first task on the b
 
 | Asset | Have it? | Gap | Owner |
 |---|---|---|---|
-| Resume (current) | | | Intern |
-| Project 1 writeup | | | Intern |
-| Project 2 writeup | | | Intern |
-| Blog post 1 draft | | | Intern |
-| Headshot / photo | | | Intern |
-| Bio paragraph | | | Intern |
+| Resume (current) | Yes | Export to PDF, place in `public/` | Intern |
+| Project 1 writeup | Raw material only | Write the case study (issue #15) | Intern |
+| Project 2 writeup | Raw material only | Write the case study (issue #18, stretch/P1) | Intern |
+| Blog post 1 draft | No | Choose topic, draft it (issue #16) | Intern |
+| Headshot / photo | Yes | Crop + web-optimize (issue #17) | Intern |
+| Bio paragraph | Yes | Adapt for site tone/length (issue #17) | Intern |
 
 **Case study format** — use this for every project:
 
