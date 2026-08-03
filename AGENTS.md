@@ -1,22 +1,101 @@
-## Development
+# CLAUDE.md — Milan06.github.io (Personal Portfolio & Blog)
 
-When starting the dev server, use background mode:
+Personal portfolio + blog, built with Astro, hosted on GitHub Pages under the
+personal account. Full spec in `SPEC.md`, epics/stories in `BACKLOG.md`.
+
+## Stack
+
+- Astro, **static output only** — no server, no API routes, no SSR, no
+  database. GitHub Pages serves static files only; anything dynamic runs at
+  build time or in the browser.
+- Tailwind CSS v4 via `@tailwindcss/vite` (installed with `npx astro add
+  tailwind` — not the legacy `@astrojs/tailwind` integration).
+- MDX for blog posts and project case studies.
+- One React island planned — feature not yet chosen (Epic 5 in BACKLOG.md).
+- Deploy: GitHub Actions (`withastro/action` + `actions/deploy-pages`) →
+  GitHub Pages.
+
+## Version gotchas — read before touching Astro config or content collections
+
+Astro moved fast through 2025–26. Older tutorials and a lot of training data
+describe the previous way of doing these things — getting them wrong costs an
+hour of confusing errors.
+
+- **Content config lives at `src/content.config.ts`**, at the `src/` root —
+  *not* `src/content/config.ts`. That path was removed in Astro 6.
+- **Every collection requires a `loader`**, e.g. `glob({ pattern:
+  '**/*.{md,mdx}', base: './src/content/blog' })`. Bare content directories
+  no longer auto-register.
+- **Import Zod from `astro/zod`**, not from `astro:content`.
+- **Tailwind** was installed via `npx astro add tailwind`, which wires up the
+  `@tailwindcss/vite` plugin and `src/styles/global.css` (`@import
+  "tailwindcss"`). That stylesheet is imported once, in `src/layouts/Layout.astro`.
+- **`site` is set** in `astro.config.mjs` to `https://Milan06.github.io`.
+  `base` is *not* needed — user-site repos (`<username>.github.io`) are
+  exempt.
+
+## Directory conventions
 
 ```
-astro dev --background
+src/
+├── content.config.ts       # Zod schemas + glob() loaders — not yet created, see Epic 4.3
+├── content/
+│   ├── blog/                # .md / .mdx posts
+│   └── projects/            # .md case studies
+├── styles/global.css        # @import "tailwindcss"
+├── components/
+│   ├── *.astro               # static, zero JS
+│   └── *.tsx                  # React islands, hydrated on demand via client:*
+├── layouts/
+│   └── Layout.astro          # base layout — every page should use this
+└── pages/
+public/                      # resume PDF, images, favicon
 ```
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
+## Content model
 
-## Documentation
+- Two content collections planned: `blog` and `projects`.
+- Required frontmatter fields: `title`, `date`, `description`, `tags`.
+- A deliberately malformed frontmatter file should **fail the build**, not
+  ship silently — that guardrail is the point of Epic 4.3, don't work around it.
 
-Full documentation: https://docs.astro.build
+## Styling rules
 
-Consult these guides before working on related tasks:
+- Tailwind utility classes only. No per-component CSS files unless there's a
+  specific reason to break from that.
+- `global.css` is imported once, in the base layout — don't re-import it
+  per-page.
 
-- [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
-- [Working with Astro components](https://docs.astro.build/en/basics/astro-components/)
-- [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
-- [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
-- [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
-- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+## Don't touch / ask first
+
+- `astro.config.mjs`'s `site` value and the absence of `base` — deliberate,
+  see version gotchas above.
+- No server-rendering, API routes, or database — this is a static site.
+- **Repo is currently private and the deploy workflow is not yet live.**
+  Don't push to `main` or flip the repo to public without an explicit
+  go-ahead — see issue #13 (pre-publish validation pass) on the board first.
+
+## Working agreement
+
+- Plan before coding on anything non-trivial; read the diff before accepting it.
+- One issue → one branch → one PR.
+- Keep `docs/reflection.md` updated (Epic 2.4) — a few short entries a day.
+- **This file is living documentation.** Update it as conventions emerge
+  during the week — if you're repeating the same context to the agent twice,
+  it belongs here.
+
+## Local dev
+
+- `npm run dev` — dev server at `localhost:4321`
+- `npm run build` — static build to `./dist/`
+- `npm run preview` — preview the production build locally
+- To run the dev server in the background: `astro dev --background`, managed
+  with `astro dev stop` / `astro dev status` / `astro dev logs`
+
+## Reference docs
+
+- [Routing](https://docs.astro.build/en/guides/routing/)
+- [Astro components](https://docs.astro.build/en/basics/astro-components/)
+- [Framework components (React, etc.)](https://docs.astro.build/en/guides/framework-components/)
+- [Content collections](https://docs.astro.build/en/guides/content-collections/)
+- [Styling / Tailwind](https://docs.astro.build/en/guides/styling/)
