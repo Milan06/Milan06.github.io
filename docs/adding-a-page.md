@@ -87,6 +87,26 @@ never be generated.
 "Home" is always present as a pill item, on every page, styled the same as
 the rest — it's not a special case.
 
+### Where the nav items come from
+
+`NAV_ENTRIES` in `src/lib/nav.ts` is the single source of truth for both navs.
+Each entry has a `label`, an optional `href` (**set it only once that page
+actually exists**), and an optional `hotspotId` matching a hotspot in
+`index.astro` — that id is what makes hovering the nav item glow the object in
+the room.
+
+That gives three item shapes, which the two navs render differently:
+
+| Entry | Home page (`Room.tsx`) | Other pages (`NavPill`) |
+|---|---|---|
+| `href` is the current page | `<span aria-current="page">`, not a link | same |
+| `href` set, different page | `<a>`, and still glows its object on hover | `<a>` |
+| no `href` yet | `<button>` — hover-only, glows its object, navigates nowhere | `<a>` to `/`, since every item on a static page needs a destination and the object lives in the room |
+
+**So adding a page means adding its `href` to the matching entry** — both navs
+pick it up, and its nav item stops being a dead end. That's the same one-line
+change as the hotspot `href` in section 3.
+
 ## 5. Checklist for the next page
 
 - [ ] `src/pages/<name>.astro`, wrapped in `Layout`

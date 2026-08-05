@@ -24,3 +24,36 @@ export const NAV_ITEM_CLASS = 'whitespace-nowrap transition-colors hover:text-cy
 export const NAV_ITEM_CURRENT_CLASS = 'text-cyan-300';
 
 export const NAV_SEPARATOR_CLASS = 'text-neutral-500';
+
+/**
+ * The nav destinations, in display order — the single source of truth for both
+ * navs.
+ *
+ * - `href` is set only when that page actually exists. Entries without one are
+ *   still hotspots in the room waiting for their page; each gets an `href` here
+ *   as its page ships (see the modal-vs-href convention in
+ *   docs/adding-a-page.md).
+ * - `hotspotId` matches an id in the home page's hotspot config, and is what
+ *   lets hovering a nav item glow the matching room object. "Home" has none —
+ *   there is nothing in the room to light up.
+ */
+export interface NavEntry {
+	label: string;
+	href?: string;
+	hotspotId?: string;
+}
+
+export const NAV_ENTRIES: NavEntry[] = [
+	{ label: 'Home', href: '/' },
+	{ label: 'CashOut Poker', hotspotId: 'poker-deck' },
+	{ label: 'Resume', hotspotId: 'resume' },
+	{ label: 'About Me', href: '/about-me', hotspotId: 'about-me' },
+	{ label: 'Blog Post', hotspotId: 'blog-post' },
+];
+
+/**
+ * Nav items for static pages, where every item has to go somewhere. Entries
+ * with no page of their own fall back to the room, which is where their object
+ * lives.
+ */
+export const navLinks = () => NAV_ENTRIES.map(({ label, href }) => ({ label, href: href ?? '/' }));

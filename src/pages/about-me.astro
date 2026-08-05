@@ -1,21 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import NavPill from '../components/NavPill.astro';
+import { navLinks } from '../lib/nav';
 
 // No BackgroundMusic import and no start-gate overlay here on purpose — both
 // belong to the home page only. See docs/adding-a-page.md.
 
-// TODO(#23): centralise this list once the Home item lands on both navs.
-// The three hotspots without pages yet point at "/" — that returns you to the
-// room, where their objects live. Each becomes a real href as its page ships
-// (see the modal-vs-href convention in docs/adding-a-page.md).
-const navItems = [
-	{ label: 'Home', href: '/' },
-	{ label: 'CashOut Poker', href: '/' },
-	{ label: 'Resume', href: '/' },
-	{ label: 'About Me', href: '/about-me' },
-	{ label: 'Blog Post', href: '/' },
-];
+const navItems = navLinks();
 
 const skills = [
 	'Lorem ipsum',
