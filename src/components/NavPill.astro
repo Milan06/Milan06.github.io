@@ -1,0 +1,41 @@
+---
+import { NAV_CONTAINER_CLASS, NAV_ITEM_CLASS, NAV_ITEM_CURRENT_CLASS, NAV_SEPARATOR_CLASS } from '../lib/nav';
+
+export interface NavItem {
+	label: string;
+	href: string;
+}
+
+interface Props {
+	items: NavItem[];
+	/** Usually Astro.url.pathname — marks the matching item as the current page. */
+	currentPath?: string;
+}
+
+const { items, currentPath } = Astro.props;
+
+// Tolerate the trailing slash Astro adds to built page URLs, so "/about-me"
+// and "/about-me/" both match.
+const normalize = (path: string) => (path.length > 1 ? path.replace(/\/$/, '') : path);
+const current = currentPath ? normalize(currentPath) : undefined;
+---
+
+<nav class={NAV_CONTAINER_CLASS}>
+	{
+		items.map((item, index) => {
+			const isCurrent = current !== undefined && normalize(item.href) === current;
+			return (
+				<>
+					{index > 0 && <span class={NAV_SEPARATOR_CLASS}>·</span>}
+					<a
+						href={item.href}
+						class:list={[NAV_ITEM_CLASS, isCurrent && NAV_ITEM_CURRENT_CLASS]}
+						aria-current={isCurrent ? 'page' : undefined}
+					>
+						{item.label}
+					</a>
+				</>
+			);
+		})
+	}
+</nav>

@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import ProjectHotspot from './ProjectHotspot';
 import LightSwitch from './LightSwitch';
+import { NAV_CONTAINER_CLASS, NAV_ITEM_CLASS, NAV_SEPARATOR_CLASS } from '../lib/nav';
 
 interface Region {
 	left: number;
@@ -52,13 +53,13 @@ export default function Room({ roomSrc, roomNightSrc, roomWidth, roomHeight, hot
 	return (
 		<>
 			{started && (
-				<nav className="fixed left-1/2 top-4 z-40 flex -translate-x-1/2 flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-full bg-black/70 px-6 py-3 font-['Press_Start_2P'] text-xs text-white">
+				<nav className={NAV_CONTAINER_CLASS}>
 					{hotspots.map((hotspot, index) => (
 						<Fragment key={hotspot.id}>
-							{index > 0 && <span className="text-neutral-500">·</span>}
+							{index > 0 && <span className={NAV_SEPARATOR_CLASS}>·</span>}
 							<button
 								type="button"
-								className="whitespace-nowrap transition-colors hover:text-cyan-300"
+								className={NAV_ITEM_CLASS}
 								onMouseEnter={() => setHoveredId(hotspot.id)}
 								onMouseLeave={() => clearHover(hotspot.id)}
 							>
