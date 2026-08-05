@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import BackgroundMusic from '../components/BackgroundMusic.astro';
 import Room from '../components/Room';
 import roomBase from '../assets/room-base2.png';
 import roomBaseNight from '../assets/room-base(night).png';
@@ -73,6 +74,8 @@ const lightSwitch = {
 		hotspots={hotspots}
 		lightSwitch={lightSwitch}
 	/>
+
+	<BackgroundMusic />
 
 	<div
 		id="start-overlay"

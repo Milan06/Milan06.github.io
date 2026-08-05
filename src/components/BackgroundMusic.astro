@@ -1,0 +1,66 @@
+---
+// Home-page only — see docs/adding-a-page.md. Subpages (About Me, blog, ...)
+// deliberately load silent, so don't add this to Layout.astro.
+interface Props {
+	src?: string;
+	volume?: number;
+}
+
+const { src = '/lobby-music.mp3', volume = 0.4 } = Astro.props;
+---
+
+<audio id="lobby-music" src={src} data-volume={volume} loop preload="auto"></audio>
+
+<button
+	id="music-toggle"
+	type="button"
+	aria-pressed="false"
+	aria-label="Mute background music"
+	class="fixed bottom-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/70 text-white shadow-lg hover:bg-black/90"
+>
+	<svg id="icon-unmuted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+		<path d="M3 9v6h4l5 5V4L7 9H3z" />
+		<path d="M16.5 12a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 16.5 12z" />
+	</svg>
+	<svg id="icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="hidden h-5 w-5">
+		<path d="M3 9v6h4l5 5V4L7 9H3z" />
+		<path d="M19 8.7 17.6 7.3 15 9.9l-2.6-2.6-1.4 1.4L13.6 11 11 13.6l1.4 1.4 2.6-2.6 2.6 2.6 1.4-1.4L16.4 11z" />
+	</svg>
+</button>
+
+<script>
+	const audio = document.getElementById('lobby-music') as HTMLAudioElement;
+	const toggleButton = document.getElementById('music-toggle') as HTMLButtonElement;
+	const iconUnmuted = document.getElementById('icon-unmuted') as HTMLElement;
+	const iconMuted = document.getElementById('icon-muted') as HTMLElement;
+
+	if (audio && toggleButton && iconUnmuted && iconMuted) {
+		audio.volume = Number(audio.dataset.volume ?? 0.4);
+
+		let started = false;
+		function ensureStarted() {
+			if (started) return;
+			started = true;
+			// Browsers block audio until the user has interacted with the page,
+			// so playback starts on the first click rather than on load.
+			audio.play().catch(() => {});
+		}
+
+		function updateIcon(muted: boolean) {
+			iconUnmuted.classList.toggle('hidden', muted);
+			iconMuted.classList.toggle('hidden', !muted);
+			toggleButton.setAttribute('aria-pressed', String(muted));
+			toggleButton.setAttribute('aria-label', muted ? 'Unmute background music' : 'Mute background music');
+		}
+
+		document.addEventListener('click', ensureStarted, { once: true });
+
+		toggleButton.addEventListener('click', () => {
+			ensureStarted();
+			audio.muted = !audio.muted;
+			updateIcon(audio.muted);
+		});
+
+		updateIcon(audio.muted);
+	}
+</script>
