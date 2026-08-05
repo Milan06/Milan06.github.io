@@ -54,6 +54,11 @@ src/
 public/                      # resume PDF, images, favicon
 ```
 
+Adding a new page? See `docs/adding-a-page.md` first — covers the
+file-based routing pattern, which pages get the start-gate/music and which
+don't, the hotspot modal-vs-link convention, and the shared nav styling
+approach.
+
 ## Content model
 
 - Two content collections planned: `blog` and `projects`.
@@ -74,8 +79,10 @@ public/                      # resume PDF, images, favicon
   see version gotchas above.
 - No server-rendering, API routes, or database — this is a static site.
 - **Repo is currently private and the deploy workflow is not yet live.**
-  Don't push to `main` or flip the repo to public without an explicit
-  go-ahead — see issue #13 (pre-publish validation pass) on the board first.
+  Pushing to `main` is fine as of 2026-08-05 (explicit go-ahead given, and
+  `origin/main` has been caught up). Still don't flip the repo to public
+  without an explicit go-ahead — see issue #13 (pre-publish validation
+  pass) on the board first.
 
 ## Working agreement
 
