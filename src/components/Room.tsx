@@ -8,6 +8,7 @@ import {
 	NAV_ITEM_CURRENT_CLASS,
 	NAV_SEPARATOR_CLASS,
 } from '../lib/nav';
+import { shouldSkipStartScreen } from '../lib/startGate';
 
 interface Region {
 	left: number;
@@ -47,6 +48,10 @@ export default function Room({ roomSrc, roomNightSrc, roomWidth, roomHeight, hot
 	const [isNight, setIsNight] = useState(false);
 
 	useEffect(() => {
+		// Checked here rather than in the initial state so server and client render
+		// the same thing and hydration stays quiet; the nav appears a frame later.
+		if (shouldSkipStartScreen()) setStarted(true);
+
 		const onGameStarted = () => setStarted(true);
 		window.addEventListener('game-started', onGameStarted);
 		return () => window.removeEventListener('game-started', onGameStarted);
