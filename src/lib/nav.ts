@@ -12,8 +12,11 @@
  * generated.
  */
 
+// max-w keeps the pill inside the viewport on narrow screens — without it the
+// items refuse to wrap, the pill grows past the screen edge, and the whole
+// document scrolls horizontally.
 export const NAV_CONTAINER_CLASS =
-	"fixed left-1/2 top-4 z-40 flex -translate-x-1/2 flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-full bg-black/70 px-6 py-3 font-['Press_Start_2P'] text-xs text-white";
+	"fixed left-1/2 top-4 z-40 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-full bg-black/70 px-6 py-3 font-['Press_Start_2P'] text-xs text-white";
 
 export const NAV_ITEM_CLASS = 'whitespace-nowrap transition-colors hover:text-cyan-300';
 
