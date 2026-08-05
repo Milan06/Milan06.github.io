@@ -66,3 +66,27 @@ the decomposition right actually matters.
 ### What it missed
 
 *(pending — one sentence, after you've critiqued the above)*
+
+---
+
+## Process gap — the room feature was built outside the issue/branch/PR flow
+
+**Went wrong:** The entire interactive home-page room (hotspots, glow
+overlays, background music, night mode, top nav) got built directly on
+`main` with zero corresponding GitHub issues, no feature branch, no PR —
+just direct edits, turn after turn. It wasn't caught until starting the
+About Me feature and explicitly checking `git status`, at which point the
+working tree had 7 modified files and 4 new untracked
+directories/files sitting uncommitted, none of it ticketed anywhere on the
+board.
+
+**Why it happened:** each step felt small in the moment (one hotspot, one
+glow asset, one nav tweak), so "this needs its own issue and branch" never
+triggered — the discipline only makes sense at the scope of a feature, and
+nothing forced a pause to notice the feature-sized pile accumulating.
+
+**Would do differently:** treat "let's build X" as the trigger to check for
+an issue *before* the first file edit, not after. Resolved for this backlog
+by committing it retroactively straight to `main` in one labeled commit
+(cheaper than fabricating a paper trail after the fact) and resuming
+issue → branch → PR discipline strictly from the About Me feature onward.

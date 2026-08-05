@@ -11,7 +11,9 @@ personal account. Full spec in `SPEC.md`, epics/stories in `BACKLOG.md`.
 - Tailwind CSS v4 via `@tailwindcss/vite` (installed with `npx astro add
   tailwind` — not the legacy `@astrojs/tailwind` integration).
 - MDX for blog posts and project case studies.
-- One React island planned — feature not yet chosen (Epic 5 in BACKLOG.md).
+- React island: the interactive home-page room (`Room.tsx` +
+  `ProjectHotspot`/`LightSwitch`), hydrated via `client:load` — see Epic 5 in
+  BACKLOG.md. ADR (story 5.1) still outstanding.
 - Deploy: GitHub Actions (`withastro/action` + `actions/deploy-pages`) →
   GitHub Pages.
 

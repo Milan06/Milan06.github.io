@@ -1,7 +1,107 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Room from '../components/Room';
+import roomBase from '../assets/room-base2.png';
+import roomBaseNight from '../assets/room-base(night).png';
+import pokerDeckGlow from '../assets/poker-deck2.png';
+import resumeGlow from '../assets/resume-papers2.png';
+import screenGlow from '../assets/about-me(screen).png';
+import booksGlow from '../assets/blog-post2(books).png';
+import lightSwitchDayGlow from '../assets/lightswitch(day).png';
+import lightSwitchNightGlow from '../assets/lightswitch(night).png';
+
+// bounding boxes traced from room-base2.png, in source pixels
+const pokerDeckBox = { left: 1070, top: 212, right: 1118, bottom: 260 };
+const papersBox = { left: 380, top: 204, right: 441, bottom: 276 };
+const monitorBox = { left: 458, top: 138, right: 571, bottom: 224 };
+const booksBox = { left: 626, top: 198, right: 674, bottom: 264 };
+const lightSwitchBox = { left: 808, top: 806, right: 842, bottom: 850 };
+
+function toRegion(box: { left: number; top: number; right: number; bottom: number }) {
+	return {
+		left: (box.left / roomBase.width) * 100,
+		top: (box.top / roomBase.height) * 100,
+		width: ((box.right - box.left) / roomBase.width) * 100,
+		height: ((box.bottom - box.top) / roomBase.height) * 100,
+	};
+}
+
+const hotspots = [
+	{
+		id: 'poker-deck',
+		title: 'CashOut Poker',
+		subtitle: 'App Project',
+		description:
+			'A placeholder description for the CashOut Poker project — swap this for the real case study once the projects content collection exists.',
+		region: toRegion(pokerDeckBox),
+		glowSrc: pokerDeckGlow.src,
+	},
+	{
+		id: 'resume',
+		title: 'Resume',
+		region: toRegion(papersBox),
+		glowSrc: resumeGlow.src,
+	},
+	{
+		id: 'about-me',
+		title: 'About Me',
+		region: toRegion(monitorBox),
+		glowSrc: screenGlow.src,
+	},
+	{
+		id: 'blog-post',
+		title: 'Blog Post',
+		region: toRegion(booksBox),
+		glowSrc: booksGlow.src,
+	},
+];
+
+const lightSwitch = {
+	region: toRegion(lightSwitchBox),
+	dayGlowSrc: lightSwitchDayGlow.src,
+	nightGlowSrc: lightSwitchNightGlow.src,
+};
 ---
 
-<Layout title="Astro">
-	<h1 class="text-3xl font-bold underline">Astro</h1>
+<Layout title="Milan Patel">
+	<Room
+		client:load
+		roomSrc={roomBase.src}
+		roomNightSrc={roomBaseNight.src}
+		roomWidth={roomBase.width}
+		roomHeight={roomBase.height}
+		hotspots={hotspots}
+		lightSwitch={lightSwitch}
+	/>
+
+	<div
+		id="start-overlay"
+		class="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-10 bg-neutral-950 transition-opacity duration-500"
+	>
+		<h1
+			class="px-4 text-center text-2xl text-white font-['Press_Start_2P'] sm:text-4xl"
+			style="text-shadow: 4px 4px 0 #000;"
+		>
+			Milan's Portfolio
+		</h1>
+		<button
+			id="start-button"
+			type="button"
+			class="rounded-2xl border-b-8 border-red-900 bg-gradient-to-b from-red-500 to-red-700 px-10 py-4 text-xl text-white font-['Press_Start_2P'] shadow-[0_6px_0_rgba(0,0,0,0.4)] transition-transform active:translate-y-2 active:border-b-2"
+		>
+			Start
+		</button>
+	</div>
+
+	<script>
+		const overlay = document.getElementById('start-overlay');
+		const startButton = document.getElementById('start-button');
+
+		startButton?.addEventListener('click', () => {
+			if (!overlay) return;
+			overlay.classList.add('pointer-events-none', 'opacity-0');
+			overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
+			window.dispatchEvent(new CustomEvent('game-started'));
+		});
+	</script>
 </Layout>
