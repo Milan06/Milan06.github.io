@@ -48,7 +48,7 @@ export const NAV_ENTRIES: NavEntry[] = [
 	{ label: 'CashOut Poker', hotspotId: 'poker-deck' },
 	{ label: 'Resume', hotspotId: 'resume' },
 	{ label: 'About Me', href: '/about-me', hotspotId: 'about-me' },
-	{ label: 'Blog Post', hotspotId: 'blog-post' },
+	{ label: 'Blog Post', href: '/blog', hotspotId: 'blog-post' },
 ];
 
 /**

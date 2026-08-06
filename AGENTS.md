@@ -131,6 +131,24 @@ checking `astro dev logs` for hydration errors. This gotcha has cost time
 twice — once after adding the React integration, once after running builds
 against a live server.
 
+### New page looks unstyled? Restart the dev server
+
+**After creating a new file in `src/pages/`, restart the dev server.** Tailwind
+scans source files to decide which classes to generate, and a file that didn't
+exist when the server started may not get picked up — so any class used only in
+that new file has no CSS behind it. The markup looks perfect and the page still
+renders, just with missing spacing, borders and colours, which reads like a
+layout mistake rather than a stale cache.
+
+Confirmed both times by building (`npm run build`, server stopped) and grepping
+`dist/_astro/*.css` for the class — present in the built CSS but absent in dev
+means it's staleness, not your markup. Hit while adding both `/about-me` and
+`/blog`.
+
+When grepping that CSS, use `grep -F` on a distinctive substring: Tailwind
+escapes its selectors (`.max-w-\[calc\(100vw-2rem\)\]`), so a regex will
+happily report a class as missing when it's right there.
+
 ## Reference docs
 
 - [Routing](https://docs.astro.build/en/guides/routing/)
