@@ -1,0 +1,102 @@
+---
+import Layout from '../layouts/Layout.astro';
+import NavPill from '../components/NavPill.astro';
+
+// No BackgroundMusic import and no start-gate overlay here on purpose — both
+// belong to the home page only. See docs/adding-a-page.md.
+
+// TODO(#23): centralise this list once the Home item lands on both navs.
+// The three hotspots without pages yet point at "/" — that returns you to the
+// room, where their objects live. Each becomes a real href as its page ships
+// (see the modal-vs-href convention in docs/adding-a-page.md).
+const navItems = [
+	{ label: 'Home', href: '/' },
+	{ label: 'CashOut Poker', href: '/' },
+	{ label: 'Resume', href: '/' },
+	{ label: 'About Me', href: '/about-me' },
+	{ label: 'Blog Post', href: '/' },
+];
+
+const skills = [
+	'Lorem ipsum',
+	'Dolor sit amet',
+	'Consectetur',
+	'Adipiscing elit',
+	'Sed do eiusmod',
+	'Tempor incididunt',
+	'Ut labore',
+	'Magna aliqua',
+];
+
+const funFacts = [
+	'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+	'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+	'Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+];
+---
+
+<Layout title="About Me — Milan Patel">
+	<NavPill items={navItems} currentPath={Astro.url.pathname} />
+
+	<!-- Generous top padding clears the fixed nav pill, which wraps to several
+	     lines on narrow screens and is much taller there than on desktop. -->
+	<main class="min-h-screen bg-stone-50 px-6 pb-24 pt-52 text-stone-900 sm:pt-32">
+		<article class="mx-auto max-w-3xl">
+			<header class="border-b-4 border-stone-900 pb-8">
+				<h1 class="font-['Press_Start_2P'] text-xl leading-relaxed sm:text-2xl">About Me</h1>
+				<p class="mt-4 text-lg text-stone-600">
+					Lorem ipsum dolor sit amet — a one-line positioning statement goes here.
+				</p>
+			</header>
+
+			<div class="mt-12 grid gap-12 sm:grid-cols-[200px_1fr] sm:gap-10">
+				<!-- Placeholder: swap for a cropped, web-optimised headshot (BACKLOG.md 3.4). -->
+				<div
+					class="flex aspect-[4/5] w-full max-w-[200px] items-center justify-center border-4 border-dashed border-stone-400 bg-stone-100"
+				>
+					<span class="font-['Press_Start_2P'] text-[10px] text-stone-500">Photo</span>
+				</div>
+
+				<section aria-labelledby="bio-heading">
+					<h2 id="bio-heading" class="font-['Press_Start_2P'] text-sm text-stone-900">Bio</h2>
+					<div class="mt-4 space-y-4 leading-relaxed text-stone-700">
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+							dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+							ea commodo consequat.
+						</p>
+						<p>
+							Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+							Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+							laborum.
+						</p>
+					</div>
+				</section>
+			</div>
+
+			<section aria-labelledby="skills-heading" class="mt-16">
+				<h2 id="skills-heading" class="font-['Press_Start_2P'] text-sm text-stone-900">Skills</h2>
+				<ul class="mt-6 flex flex-wrap gap-3">
+					{
+						skills.map((skill) => (
+							<li class="border-2 border-stone-900 bg-white px-3 py-1.5 text-sm shadow-[3px_3px_0_0_rgba(28,25,23,1)]">
+								{skill}
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<section aria-labelledby="facts-heading" class="mt-16">
+				<h2 id="facts-heading" class="font-['Press_Start_2P'] text-sm text-stone-900">Fun Facts</h2>
+				<ul class="mt-6 space-y-3 leading-relaxed text-stone-700">
+					{
+						funFacts.map((fact) => (
+							<li class="border-l-4 border-stone-300 pl-4">{fact}</li>
+						))
+					}
+				</ul>
+			</section>
+		</article>
+	</main>
+</Layout>
