@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+import NavPill from '../components/NavPill.astro';
+import { navLinks } from '../lib/nav';
+
+// No BackgroundMusic import and no start-gate overlay here on purpose — both
+// belong to the home page only. See docs/adding-a-page.md.
+
+const navItems = navLinks();
+
+// TODO(Epic 4.3): replace with a getCollection('blog') query once
+// src/content.config.ts exists. Field names deliberately match the frontmatter
+// the Zod schema will require (title, date, description, tags) so the swap is
+// mechanical. Individual post pages are BACKLOG 4.4.
+const posts = [
+	{
+		slug: 'lorem-ipsum-dolor',
+		title: 'Lorem ipsum dolor sit amet',
+		date: new Date('2026-08-04'),
+		description:
+			'Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
+		tags: ['lorem', 'ipsum'],
+	},
+	{
+		slug: 'sed-do-eiusmod',
+		title: 'Sed do eiusmod tempor incididunt',
+		date: new Date('2026-07-28'),
+		description:
+			'Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.',
+		tags: ['dolor', 'sit'],
+	},
+	{
+		slug: 'ut-enim-ad-minim',
+		title: 'Ut enim ad minim veniam',
+		date: new Date('2026-07-19'),
+		description:
+			'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+		tags: ['amet'],
+	},
+];
+
+const sortedPosts = [...posts].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+
+// timeZone: 'UTC' matters — `new Date('2026-08-04')` parses as UTC midnight, so
+// formatting it in a timezone behind UTC renders the previous day.
+const dateFormat = new Intl.DateTimeFormat('en-GB', {
+	day: 'numeric',
+	month: 'long',
+	year: 'numeric',
+	timeZone: 'UTC',
+});
+---
+
+<Layout title="Blog — Milan Patel">
+	<NavPill items={navItems} currentPath={Astro.url.pathname} />
+
+	<!-- Generous top padding clears the fixed nav pill, which wraps to several
+	     lines on narrow screens and is much taller there than on desktop. -->
+	<main class="min-h-screen bg-stone-50 px-6 pb-24 pt-52 text-stone-900 sm:pt-32">
+		<div class="mx-auto max-w-3xl">
+			<header class="border-b-4 border-stone-900 pb-8">
+				<h1 class="font-['Press_Start_2P'] text-xl leading-relaxed sm:text-2xl">Blog</h1>
+				<p class="mt-4 text-lg text-stone-600">
+					Lorem ipsum dolor sit amet — notes on what I'm building and learning.
+				</p>
+			</header>
+
+			<ul class="mt-12 space-y-10">
+				{
+					sortedPosts.map((post) => (
+						<li class="border-b border-stone-200 pb-10 last:border-b-0">
+							<article>
+								<!-- Not a link yet: individual post pages arrive with BACKLOG 4.4. -->
+								<h2 class="font-['Press_Start_2P'] text-sm leading-relaxed text-stone-900">{post.title}</h2>
+								<p class="mt-3 text-sm text-stone-500">
+									<time datetime={post.date.toISOString()}>{dateFormat.format(post.date)}</time>
+								</p>
+								<p class="mt-3 leading-relaxed text-stone-700">{post.description}</p>
+								<ul class="mt-4 flex flex-wrap gap-2">
+									{post.tags.map((tag) => (
+										<li class="border-2 border-stone-900 bg-white px-2 py-1 text-xs shadow-[3px_3px_0_0_rgba(28,25,23,1)]">
+											{tag}
+										</li>
+									))}
+								</ul>
+							</article>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</main>
+</Layout>
