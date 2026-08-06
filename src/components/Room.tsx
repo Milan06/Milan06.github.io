@@ -8,6 +8,7 @@ import {
 	NAV_ITEM_CURRENT_CLASS,
 	NAV_SEPARATOR_CLASS,
 	hrefForHotspot,
+	opensInNewTab,
 } from '../lib/nav';
 import { shouldSkipStartScreen } from '../lib/startGate';
 
@@ -123,6 +124,7 @@ export default function Room({ roomSrc, roomNightSrc, roomWidth, roomHeight, hot
 							description={hotspot.description}
 							link={hotspot.link}
 							href={hrefForHotspot(hotspot.id)}
+							newTab={opensInNewTab(hotspot.id)}
 							isHovered={hoveredId === hotspot.id}
 							onHoverStart={() => setHoveredId(hotspot.id)}
 							onHoverEnd={() => clearHover(hotspot.id)}

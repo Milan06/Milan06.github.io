@@ -96,8 +96,14 @@ Define Zod schemas for `blog` and `projects` in `src/content.config.ts` (root of
 ### 4.5 Projects index + case study pages `P0` `[I]`
 **AC:** grid or list of projects; each links to a full case study page; tech tags visible.
 
-### 4.6 Resume page `P0` `[I]`
+### 4.6 Resume page `P0` `[I]` — **DROPPED 2026-08-06**
 **AC:** resume rendered as a readable web page; prominent PDF download link.
+
+**Why dropped:** the Résumé nav item and the papers hotspot link straight to
+`public/milan-patel-resume.pdf`, opening in a new tab (see issue #43). No HTML
+résumé page. Tradeoff accepted knowingly: a PDF is weaker than a web page for
+SEO, on phones, and for screen readers unless it was exported with tags. Revisit
+if the résumé needs to be indexable or readable on mobile.
 
 ### 4.7 About page `P1` `[I]`
 ### 4.8 Now page `P1` `[I]`
