@@ -5,11 +5,10 @@ Established while building `/about-me`, the first real subpage on the site
 modals in the room). This is the pattern to repeat for the next one (e.g. the
 blog).
 
-> **Status (2026-08-05):** sections 1 and 2 describe how the code works
-> today. Sections 3 and 4 are the agreed target conventions, landing with
-> issues #20 (hotspot `href` fork) and #21 (shared nav component + style
-> constants). If those issues are still open, expect to build the pattern as
-> you go rather than find it already there.
+> **Status (2026-08-05):** sections 1, 2 and 4 describe how the code works
+> today. Section 3 (the hotspot `href` fork) is the agreed target
+> convention, landing with issue #20 — if that issue is still open, expect
+> to build it as you go rather than find it already there.
 
 ## 1. Routing is just a file
 
@@ -71,13 +70,19 @@ twice on purpose:
 - **Home page** (`Room.tsx`): a React component, because hovering a nav item
   has to glow the matching object in the room — it's wired into `Room.tsx`'s
   shared hover state.
-- **Every other page**: a plain static component (no JS, no hover-sync —
-  there's no room to glow). Plain links, CSS-only hover color change.
+- **Every other page**: `NavPill.astro` — a plain static component (no JS, no
+  hover-sync — there's no room to glow). Plain `<a>` links, CSS-only hover
+  colour change. Takes `items` (`{ label, href }[]`) and an optional
+  `currentPath` (pass `Astro.url.pathname`) which marks the matching item
+  with `aria-current="page"` and the highlight colour.
 
-Both pull their Tailwind classes from one shared constants file so the two
+Both pull their Tailwind classes from `src/lib/nav.ts` so the two
 implementations can't silently drift apart in appearance. If you're changing
-how the nav looks, update the shared constants, not each component
-separately.
+how the nav looks, update those constants, not each component separately.
+
+Keep the values in `nav.ts` as plain string literals — Tailwind scans source
+files for class names, so classes assembled dynamically at runtime would
+never be generated.
 
 "Home" is always present as a pill item, on every page, styled the same as
 the rest — it's not a special case.

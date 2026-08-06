@@ -50,6 +50,8 @@ src/
 │   └── *.tsx                  # React islands, hydrated on demand via client:*
 ├── layouts/
 │   └── Layout.astro          # base layout — every page should use this
+├── lib/                      # shared non-component values (e.g. nav.ts style
+│                             # constants shared by the React + static navs)
 └── pages/
 public/                      # resume PDF, images, favicon
 ```
