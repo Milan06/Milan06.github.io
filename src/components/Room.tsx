@@ -1,7 +1,13 @@
 import { Fragment, useEffect, useState } from 'react';
 import ProjectHotspot from './ProjectHotspot';
 import LightSwitch from './LightSwitch';
-import { NAV_CONTAINER_CLASS, NAV_ITEM_CLASS, NAV_SEPARATOR_CLASS } from '../lib/nav';
+import {
+	NAV_CONTAINER_CLASS,
+	NAV_ENTRIES,
+	NAV_ITEM_CLASS,
+	NAV_ITEM_CURRENT_CLASS,
+	NAV_SEPARATOR_CLASS,
+} from '../lib/nav';
 
 interface Region {
 	left: number;
@@ -54,19 +60,37 @@ export default function Room({ roomSrc, roomNightSrc, roomWidth, roomHeight, hot
 		<>
 			{started && (
 				<nav className={NAV_CONTAINER_CLASS}>
-					{hotspots.map((hotspot, index) => (
-						<Fragment key={hotspot.id}>
-							{index > 0 && <span className={NAV_SEPARATOR_CLASS}>·</span>}
-							<button
-								type="button"
-								className={NAV_ITEM_CLASS}
-								onMouseEnter={() => setHoveredId(hotspot.id)}
-								onMouseLeave={() => clearHover(hotspot.id)}
-							>
-								{hotspot.title}
-							</button>
-						</Fragment>
-					))}
+					{NAV_ENTRIES.map((entry, index) => {
+						// Hovering an entry glows its room object; "Home" has none.
+						const hover = entry.hotspotId
+							? {
+									onMouseEnter: () => setHoveredId(entry.hotspotId!),
+									onMouseLeave: () => clearHover(entry.hotspotId!),
+								}
+							: {};
+
+						return (
+							<Fragment key={entry.label}>
+								{index > 0 && <span className={NAV_SEPARATOR_CLASS}>·</span>}
+								{entry.href === '/' ? (
+									// This *is* the home page — mark it, don't link back to it.
+									<span className={`${NAV_ITEM_CLASS} ${NAV_ITEM_CURRENT_CLASS}`} aria-current="page">
+										{entry.label}
+									</span>
+								) : entry.href ? (
+									<a href={entry.href} className={NAV_ITEM_CLASS} {...hover}>
+										{entry.label}
+									</a>
+								) : (
+									// No page yet — hover-only, so it glows the object without
+									// navigating anywhere.
+									<button type="button" className={NAV_ITEM_CLASS} {...hover}>
+										{entry.label}
+									</button>
+								)}
+							</Fragment>
+						);
+					})}
 				</nav>
 			)}
 
