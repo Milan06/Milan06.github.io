@@ -14,6 +14,12 @@ interface ProjectHotspotProps {
 	subtitle?: string;
 	description?: string;
 	link?: string;
+	/**
+	 * The object's own page, once it has one. Set → clicking navigates there and
+	 * the in-room modal is skipped entirely. Unset → clicking opens the modal.
+	 * Hover and glow behave identically either way. See docs/adding-a-page.md.
+	 */
+	href?: string;
 	isHovered: boolean;
 	onHoverStart: () => void;
 	onHoverEnd: () => void;
@@ -26,6 +32,7 @@ export default function ProjectHotspot({
 	subtitle,
 	description,
 	link,
+	href,
 	isHovered,
 	onHoverStart,
 	onHoverEnd,
@@ -50,16 +57,27 @@ export default function ProjectHotspot({
 
 	return (
 		<>
-			<button
-				type="button"
-				aria-label={subtitle ? `${title} — ${subtitle}` : title}
-				aria-haspopup="dialog"
-				className="absolute cursor-pointer"
-				style={regionStyle}
-				onMouseEnter={onHoverStart}
-				onMouseLeave={onHoverEnd}
-				onClick={() => setIsOpen(true)}
-			/>
+			{href ? (
+				<a
+					href={href}
+					aria-label={subtitle ? `${title} — ${subtitle}` : title}
+					className="absolute cursor-pointer"
+					style={regionStyle}
+					onMouseEnter={onHoverStart}
+					onMouseLeave={onHoverEnd}
+				/>
+			) : (
+				<button
+					type="button"
+					aria-label={subtitle ? `${title} — ${subtitle}` : title}
+					aria-haspopup="dialog"
+					className="absolute cursor-pointer"
+					style={regionStyle}
+					onMouseEnter={onHoverStart}
+					onMouseLeave={onHoverEnd}
+					onClick={() => setIsOpen(true)}
+				/>
+			)}
 
 			<img
 				src={glowSrc}
