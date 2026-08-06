@@ -46,7 +46,9 @@ export interface NavEntry {
 export const NAV_ENTRIES: NavEntry[] = [
 	{ label: 'Home', href: '/' },
 	{ label: 'CashOut Poker', hotspotId: 'poker-deck' },
-	{ label: 'Resume', hotspotId: 'resume' },
+	// Label is accented; the hotspotId stays plain ASCII — it keys the mapping to
+	// the room object and the asset filename.
+	{ label: 'Résumé', hotspotId: 'resume' },
 	{ label: 'About Me', href: '/about-me', hotspotId: 'about-me' },
 	{ label: 'Blog Post', href: '/blog', hotspotId: 'blog-post' },
 ];
