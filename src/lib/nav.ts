@@ -57,3 +57,15 @@ export const NAV_ENTRIES: NavEntry[] = [
  * lives.
  */
 export const navLinks = () => NAV_ENTRIES.map(({ label, href }) => ({ label, href: href ?? '/' }));
+
+/**
+ * The page a room object links to, or undefined while it has none — in which
+ * case the hotspot falls back to opening its in-room modal.
+ *
+ * Room hotspots read their href from here rather than defining it themselves,
+ * so setting `href` on an entry above is genuinely the only change needed when
+ * a page ships: the nav item and the object in the room both follow.
+ */
+export function hrefForHotspot(hotspotId: string): string | undefined {
+	return NAV_ENTRIES.find((entry) => entry.hotspotId === hotspotId)?.href;
+}

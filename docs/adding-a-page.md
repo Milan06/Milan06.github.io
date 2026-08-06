@@ -5,10 +5,8 @@ Established while building `/about-me`, the first real subpage on the site
 modals in the room). This is the pattern to repeat for the next one (e.g. the
 blog).
 
-> **Status (2026-08-05):** sections 1, 2 and 4 describe how the code works
-> today. Section 3 (the hotspot `href` fork) is the agreed target
-> convention, landing with issue #20 — if that issue is still open, expect
-> to build it as you go rather than find it already there.
+> **Status (2026-08-06):** every section below describes how the code works
+> today, not an intention.
 
 ## 1. Routing is just a file
 
@@ -52,15 +50,20 @@ Every object in the room (`ProjectHotspot`) either opens an in-room modal
 with placeholder/teaser content, or — once it has a real page — links
 straight to it:
 
-- No `href` prop → clicking opens the modal (current behavior for CashOut
-  Poker, Resume, Blog Post).
-- `href` prop set → clicking navigates to that URL instead; the modal is
-  skipped entirely. Hover/glow behavior is identical either way.
+- No `href` → the hotspot renders as a `<button>` and clicking opens the modal
+  (current behaviour for CashOut Poker, Resume, Blog Post).
+- `href` set → it renders as an `<a>` and clicking navigates there; the modal
+  is never rendered. Hover and glow are identical either way.
 
-When a hotspot graduates from placeholder to a real page, the change is one
-line: add `href: '/whatever'` to its config in `index.astro`. No other
-plumbing changes. This is how "About Me" became the first hotspot to link to
-a real page instead of opening a modal.
+**The hotspot does not define its own `href`.** It reads it from the matching
+`NAV_ENTRIES` entry via `hrefForHotspot(id)` — the same list the nav uses (see
+section 4). So shipping a page is genuinely one line: set `href` on its entry,
+and both the nav item and the object in the room start pointing at it. That is
+how "About Me" became the first hotspot to open a page instead of a modal.
+
+Worth knowing: the modal props (`description`, `link`) stay harmless once an
+`href` is set — they're simply unused, so there's nothing to clean up when a
+hotspot graduates.
 
 ## 4. Nav pill: shared styling, two implementations
 
@@ -113,8 +116,9 @@ change as the hotspot `href` in section 3.
 - [ ] No start-gate, no music (unless you have a specific reason to repeat
       the home page's game framing)
 - [ ] Uses the shared static nav component, not a copy-pasted one
-- [ ] If this page replaces a hotspot's modal, add `href` to that hotspot's
-      config and nothing else
+- [ ] Set `href` on the page's `NAV_ENTRIES` entry in `src/lib/nav.ts` — that
+      one line updates the nav item *and* switches its room object from modal
+      to link
 - [ ] Once content collections exist (`src/content.config.ts`, see
       `CLAUDE.md`), pages like the blog index should read from the
       collection rather than hardcoding content
