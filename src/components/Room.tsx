@@ -85,7 +85,13 @@ export default function Room({ roomSrc, roomNightSrc, roomWidth, roomHeight, hot
 										{entry.label}
 									</span>
 								) : entry.href ? (
-									<a href={entry.href} className={NAV_ITEM_CLASS} {...hover}>
+									<a
+										href={entry.href}
+										className={NAV_ITEM_CLASS}
+										target={entry.newTab ? '_blank' : undefined}
+										rel={entry.newTab ? 'noopener' : undefined}
+										{...hover}
+									>
 										{entry.label}
 									</a>
 								) : (
