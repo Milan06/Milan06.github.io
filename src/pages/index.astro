@@ -97,14 +97,23 @@ const lightSwitch = {
 	</div>
 
 	<script>
+		import { markStarted, shouldSkipStartScreen } from '../lib/startGate';
+
 		const overlay = document.getElementById('start-overlay');
 		const startButton = document.getElementById('start-button');
 
-		startButton?.addEventListener('click', () => {
-			if (!overlay) return;
-			overlay.classList.add('pointer-events-none', 'opacity-0');
-			overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
-			window.dispatchEvent(new CustomEvent('game-started'));
-		});
+		if (overlay && shouldSkipStartScreen()) {
+			// Already started this session — drop the overlay outright rather than
+			// fading it, so there is no flash of the title card on the way in.
+			overlay.remove();
+		} else {
+			startButton?.addEventListener('click', () => {
+				if (!overlay) return;
+				markStarted();
+				overlay.classList.add('pointer-events-none', 'opacity-0');
+				overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
+				window.dispatchEvent(new CustomEvent('game-started'));
+			});
+		}
 	</script>
 </Layout>
