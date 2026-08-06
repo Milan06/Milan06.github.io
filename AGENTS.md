@@ -103,6 +103,34 @@ approach.
 - To run the dev server in the background: `astro dev --background`, managed
   with `astro dev stop` / `astro dev status` / `astro dev logs`
 
+### Blank white page? It's the Vite cache, not your code
+
+**Don't run `npm run build`, `astro check`, or `npx astro add ...` while the
+dev server is live.** They rewrite `node_modules/.vite` underneath the running
+server, so React ends up resolving to `react.production.js` while the dev JSX
+runtime is expected. The page goes blank and the logs show:
+
+```
+TypeError: _jsxDEV is not a function
+TypeError: Cannot read properties of null (reading 'useState')
+```
+
+Nothing is wrong with the component the stack trace points at. Recovery is
+always the same three steps:
+
+```bash
+astro dev stop
+rm -rf node_modules/.vite .astro
+astro dev --background
+```
+
+**A 200 response does not mean the page renders.** The server keeps serving
+HTML fine while hydration dies in the browser, so `curl -w '%{http_code}'`
+reports success on a blank page. Verify by loading it in a browser, or by
+checking `astro dev logs` for hydration errors. This gotcha has cost time
+twice — once after adding the React integration, once after running builds
+against a live server.
+
 ## Reference docs
 
 - [Routing](https://docs.astro.build/en/guides/routing/)
