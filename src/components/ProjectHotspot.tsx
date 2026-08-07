@@ -20,6 +20,8 @@ interface ProjectHotspotProps {
 	 * Hover and glow behave identically either way. See docs/adding-a-page.md.
 	 */
 	href?: string;
+	/** For destinations that aren't pages of this site, e.g. the résumé PDF. */
+	newTab?: boolean;
 	isHovered: boolean;
 	onHoverStart: () => void;
 	onHoverEnd: () => void;
@@ -33,6 +35,7 @@ export default function ProjectHotspot({
 	description,
 	link,
 	href,
+	newTab,
 	isHovered,
 	onHoverStart,
 	onHoverEnd,
@@ -63,6 +66,8 @@ export default function ProjectHotspot({
 					aria-label={subtitle ? `${title} — ${subtitle}` : title}
 					className="absolute cursor-pointer"
 					style={regionStyle}
+					target={newTab ? '_blank' : undefined}
+					rel={newTab ? 'noopener' : undefined}
 					onMouseEnter={onHoverStart}
 					onMouseLeave={onHoverEnd}
 				/>

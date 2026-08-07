@@ -36,19 +36,25 @@ export const NAV_SEPARATOR_CLASS = 'text-neutral-500';
  * - `hotspotId` matches an id in the home page's hotspot config, and is what
  *   lets hovering a nav item glow the matching room object. "Home" has none —
  *   there is nothing in the room to light up.
+ * - `newTab` is for destinations that aren't pages of this site — currently the
+ *   résumé PDF. It adds target/rel, and keeps the item from ever being marked
+ *   as the current page, since you never "are" on it.
  */
 export interface NavEntry {
 	label: string;
 	href?: string;
 	hotspotId?: string;
+	newTab?: boolean;
 }
 
 export const NAV_ENTRIES: NavEntry[] = [
 	{ label: 'Home', href: '/' },
 	{ label: 'CashOut Poker', hotspotId: 'poker-deck' },
 	// Label is accented; the hotspotId stays plain ASCII — it keys the mapping to
-	// the room object and the asset filename.
-	{ label: 'Résumé', hotspotId: 'resume' },
+	// the room object and the asset filename. The PDF filename stays ASCII too:
+	// it becomes the visitor's downloaded filename, and accents in a URL encode
+	// into noise.
+	{ label: 'Résumé', href: '/milan-patel-resume.pdf', hotspotId: 'resume', newTab: true },
 	{ label: 'About Me', href: '/about-me', hotspotId: 'about-me' },
 	{ label: 'Blog Post', href: '/blog', hotspotId: 'blog-post' },
 ];
@@ -58,7 +64,8 @@ export const NAV_ENTRIES: NavEntry[] = [
  * with no page of their own fall back to the room, which is where their object
  * lives.
  */
-export const navLinks = () => NAV_ENTRIES.map(({ label, href }) => ({ label, href: href ?? '/' }));
+export const navLinks = () =>
+	NAV_ENTRIES.map(({ label, href, newTab }) => ({ label, href: href ?? '/', newTab: newTab ?? false }));
 
 /**
  * The page a room object links to, or undefined while it has none — in which
@@ -70,4 +77,9 @@ export const navLinks = () => NAV_ENTRIES.map(({ label, href }) => ({ label, hre
  */
 export function hrefForHotspot(hotspotId: string): string | undefined {
 	return NAV_ENTRIES.find((entry) => entry.hotspotId === hotspotId)?.href;
+}
+
+/** Whether that room object's destination should open in a new tab. */
+export function opensInNewTab(hotspotId: string): boolean {
+	return NAV_ENTRIES.find((entry) => entry.hotspotId === hotspotId)?.newTab ?? false;
 }

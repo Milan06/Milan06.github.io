@@ -4,6 +4,8 @@ import { NAV_CONTAINER_CLASS, NAV_ITEM_CLASS, NAV_ITEM_CURRENT_CLASS, NAV_SEPARA
 export interface NavItem {
 	label: string;
 	href: string;
+	/** Destinations that aren't pages of this site, e.g. the résumé PDF. */
+	newTab?: boolean;
 }
 
 interface Props {
@@ -23,7 +25,8 @@ const current = currentPath ? normalize(currentPath) : undefined;
 <nav class={NAV_CONTAINER_CLASS}>
 	{
 		items.map((item, index) => {
-			const isCurrent = current !== undefined && normalize(item.href) === current;
+			// A new-tab destination is never "the current page" — you never land on it.
+			const isCurrent = !item.newTab && current !== undefined && normalize(item.href) === current;
 			return (
 				<>
 					{index > 0 && <span class={NAV_SEPARATOR_CLASS}>·</span>}
@@ -31,6 +34,8 @@ const current = currentPath ? normalize(currentPath) : undefined;
 						href={item.href}
 						class:list={[NAV_ITEM_CLASS, isCurrent && NAV_ITEM_CURRENT_CLASS]}
 						aria-current={isCurrent ? 'page' : undefined}
+						target={item.newTab ? '_blank' : undefined}
+						rel={item.newTab ? 'noopener' : undefined}
 					>
 						{item.label}
 					</a>
