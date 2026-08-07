@@ -32,9 +32,11 @@ hour of confusing errors.
 - **Tailwind** was installed via `npx astro add tailwind`, which wires up the
   `@tailwindcss/vite` plugin and `src/styles/global.css` (`@import
   "tailwindcss"`). That stylesheet is imported once, in `src/layouts/Layout.astro`.
-- **`site` is set** in `astro.config.mjs` to `https://Milan06.github.io`.
-  `base` is *not* needed — user-site repos (`<username>.github.io`) are
-  exempt.
+- **`site` is set** in `astro.config.mjs` to `https://milan06.github.io` —
+  all lowercase. GitHub serves Pages on a lowercase host, and `site` feeds
+  canonical URLs, Open Graph tags and `sitemap.xml`, so a capitalised value
+  bakes a mismatch into what crawlers see. `base` is *not* needed — user-site
+  repos (`<username>.github.io`) are exempt.
 
 ## Directory conventions
 
