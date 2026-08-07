@@ -8,6 +8,7 @@ import pokerDeckGlow from '../assets/poker-deck2.png';
 import resumeGlow from '../assets/resume-papers2.png';
 import screenGlow from '../assets/about-me(screen).png';
 import booksGlow from '../assets/blog-post2(books).png';
+import pencilsGlow from '../assets/pencils.png';
 import lightSwitchDayGlow from '../assets/lightswitch(day).png';
 import lightSwitchNightGlow from '../assets/lightswitch(night).png';
 
@@ -16,6 +17,7 @@ const pokerDeckBox = { left: 1070, top: 212, right: 1118, bottom: 260 };
 const papersBox = { left: 380, top: 204, right: 441, bottom: 276 };
 const monitorBox = { left: 458, top: 138, right: 571, bottom: 224 };
 const booksBox = { left: 626, top: 198, right: 674, bottom: 264 };
+const pencilsBox = { left: 589, top: 147, right: 623, bottom: 203 };
 const lightSwitchBox = { left: 808, top: 806, right: 842, bottom: 850 };
 
 function toRegion(box: { left: number; top: number; right: number; bottom: number }) {
@@ -36,6 +38,14 @@ const hotspots = [
 			'A placeholder description for the CashOut Poker project — swap this for the real case study once the projects content collection exists.',
 		region: toRegion(pokerDeckBox),
 		glowSrc: pokerDeckGlow.src,
+	},
+	{
+		id: 'bias-detection',
+		title: 'Bias Detection Project',
+		description:
+			'Placeholder description for the Bias Detection Project — replace with the real write-up. Deliberately left vague rather than inventing details about the project.',
+		region: toRegion(pencilsBox),
+		glowSrc: pencilsGlow.src,
 	},
 	{
 		id: 'resume',
