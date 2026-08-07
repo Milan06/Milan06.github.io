@@ -22,3 +22,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# machine-local agent settings — contains absolute local paths.
+# Previously only covered by a global gitignore, which doesn't travel with
+# the repo. See issue #62.
+.claude/settings.local.json
