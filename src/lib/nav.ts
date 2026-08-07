@@ -12,11 +12,14 @@
  * generated.
  */
 
-// max-w keeps the pill inside the viewport on narrow screens — without it the
-// items refuse to wrap, the pill grows past the screen edge, and the whole
-// document scrolls horizontally.
+// Centred with inset-x-0 + mx-auto + w-fit rather than left-1/2 +
+// -translate-x-1/2. The transform approach looks identical but sets the
+// containing-block edge at 50%, so only the right half of the viewport is
+// available for layout and the pill wrapped long before it had to. The
+// transform re-centres it visually, but flex-wrap has already decided by then.
+// max-w keeps a gutter so it never runs edge to edge.
 export const NAV_CONTAINER_CLASS =
-	"fixed left-1/2 top-4 z-40 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-full bg-black/70 px-6 py-3 font-['Press_Start_2P'] text-xs text-white";
+	"fixed inset-x-0 top-4 z-40 mx-auto flex w-fit max-w-[calc(100vw-2rem)] flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-full bg-black/70 px-6 py-3 font-['Press_Start_2P'] text-xs text-white";
 
 export const NAV_ITEM_CLASS = 'whitespace-nowrap transition-colors hover:text-cyan-300';
 
@@ -50,6 +53,7 @@ export interface NavEntry {
 export const NAV_ENTRIES: NavEntry[] = [
 	{ label: 'Home', href: '/' },
 	{ label: 'CashOut Poker', hotspotId: 'poker-deck' },
+	{ label: 'Bias Detection Project', hotspotId: 'bias-detection' },
 	// Label is accented; the hotspotId stays plain ASCII — it keys the mapping to
 	// the room object and the asset filename. The PDF filename stays ASCII too:
 	// it becomes the visitor's downloaded filename, and accents in a URL encode
