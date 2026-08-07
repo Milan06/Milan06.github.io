@@ -1,43 +1,53 @@
-# Astro Starter Kit: Minimal
+# milan06.github.io
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Personal portfolio and blog — an interactive pixel-art room that opens onto a
+résumé, an About Me page, project case studies and a blog.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Live at **[milan06.github.io](https://milan06.github.io)**.
 
-## 🚀 Project Structure
+Built with [Astro](https://astro.build) (static output only), Tailwind CSS v4,
+MDX for content, and a React island for the interactive home-page room.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Local development
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+All commands run from the root of the project:
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+| Command | Action |
+| :------ | :----- |
+| `npm install` | Install dependencies |
+| `npm run dev` | Start the dev server at `localhost:4321` |
+| `npm run build` | Build the production site to `./dist/` |
+| `npm run preview` | Preview the production build locally |
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Node **22.12.0 or newer** is required — Astro refuses to run on anything older,
+and the deploy pipeline pins Node 22 to match.
 
-Any static assets, like images, can be placed in the `public/` directory.
+> **Don't run `npm run build` while the dev server is live.** It rewrites the
+> Vite cache underneath the running server and the page goes blank in the
+> browser while still returning `200`. Recovery and the full explanation are in
+> [`AGENTS.md`](AGENTS.md).
 
-## 🧞 Commands
+## Deploys
 
-All commands are run from the root of the project, from a terminal:
+**Pushing to `main` deploys automatically.** Merge a pull request and the change
+is live at [milan06.github.io](https://milan06.github.io) in well under a
+minute — the first measured run took 33 seconds end to end.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+GitHub Actions does the work: [`deploy.yml`](.github/workflows/deploy.yml)
+builds the site and publishes it to GitHub Pages. A separate
+[`build-check.yml`](.github/workflows/build-check.yml) builds every pull request
+so a broken commit doesn't reach `main` in the first place.
 
-## 👀 Want to learn more?
+For anything beyond that — watching a run, deploying without a code change,
+rolling back, or working out why a deploy went red — see
+**[`docs/deploying.md`](docs/deploying.md)**.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Documentation
+
+| Document | What it covers |
+| :------- | :------------- |
+| [`AGENTS.md`](AGENTS.md) | Stack, conventions, version gotchas, local-dev traps |
+| [`docs/adding-a-page.md`](docs/adding-a-page.md) | Adding a new route, and the conventions it should follow |
+| [`docs/deploying.md`](docs/deploying.md) | The deploy pipeline, and what to do when it fails |
+| [`SPEC.md`](SPEC.md) | What this site is meant to be |
+| [`BACKLOG.md`](BACKLOG.md) | Epics and stories |
