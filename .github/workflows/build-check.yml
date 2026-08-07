@@ -1,0 +1,39 @@
+name: Build check
+
+# Deliberately separate from deploy.yml: that workflow publishes to the
+# github-pages environment and must only ever run on `main`. This one just
+# proves a pull request builds, and touches nothing.
+
+on:
+  pull_request:
+    branches: [main]
+
+# Superseded runs on the same PR are pointless once a new commit lands.
+concurrency:
+  group: build-check-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          # Keep in step with node-version in deploy.yml. Astro refuses
+          # anything below the >=22.12.0 in package.json, and a runner
+          # defaults to 20 — see issue #42.
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
