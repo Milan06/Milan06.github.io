@@ -32,7 +32,7 @@ They're deliberately separate. `deploy.yml` holds `pages: write` and
 only ever run on `main`. The PR check needs none of that — it has
 `contents: read` and nothing else, so a pull request cannot deploy.
 
-**Both pin Node 22, and they must stay in step.** See the gotcha below.
+**Both read the Node version from `.nvmrc`** (currently 22). See the gotcha below.
 
 ## Pages must be served from Actions, not a branch
 
@@ -71,18 +71,14 @@ Please upgrade Node.js to a supported version: ">=22.12.0"
 ```
 
 This failed *every* push to `main` for two days before anyone noticed, because
-the workflow had simply never run while the repo was private. The fix is one
-input:
+the workflow had simply never run while the repo was private. The fix is
+to set `node-version` explicitly.
 
-```yaml
-- uses: withastro/action@v3
-  with:
-    node-version: 22
-```
-
-`build-check.yml` pins the same version through `actions/setup-node`. If you
-bump one, bump the other — a PR that passes on Node 22 and a deploy that runs
-on something else is the worst kind of green.
+The version lives in **`.nvmrc`**, and nowhere else. `build-check.yml` reads it
+with `actions/setup-node`'s `node-version-file`. `withastro/action` has no such
+input, so `deploy.yml` reads the file in a small step and passes the value to
+`node-version`. To change Node, edit `.nvmrc` — both workflows follow, so a PR
+can't pass on one version while the deploy runs another.
 
 ## Watching a deploy
 

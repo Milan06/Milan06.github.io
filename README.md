@@ -20,7 +20,7 @@ All commands run from the root of the project:
 | `npm run preview` | Preview the production build locally |
 
 Node **22.12.0 or newer** is required — Astro refuses to run on anything older,
-and the deploy pipeline pins Node 22 to match.
+and `.nvmrc` pins the version both CI workflows use.
 
 > **Don't run `npm run build` while the dev server is live.** It rewrites the
 > Vite cache underneath the running server and the page goes blank in the
