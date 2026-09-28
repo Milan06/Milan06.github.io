@@ -1,0 +1,23 @@
+# Keeps GitHub Actions and npm dependencies current. Updates arrive as
+# PRs against main, so the build check (astro check + build) vets each
+# one before it can merge — see docs/deploying.md.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      # One PR for all minor/patch bumps; majors (e.g. a new Astro or
+      # React) still get their own PR, since those are the ones that break.
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+    open-pull-requests-limit: 5
