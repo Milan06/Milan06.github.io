@@ -100,7 +100,7 @@ Define Zod schemas for `blog` and `projects` in `src/content.config.ts` (root of
 **AC:** resume rendered as a readable web page; prominent PDF download link.
 
 **Why dropped:** the Résumé nav item and the papers hotspot link straight to
-`public/milan-patel-resume.pdf`, opening in a new tab (see issue #43). No HTML
+`public/Milan_Patel_Resume.pdf`, opening in a new tab (see issue #43). No HTML
 résumé page. Tradeoff accepted knowingly: a PDF is weaker than a web page for
 SEO, on phones, and for screen readers unless it was exported with tags. Revisit
 if the résumé needs to be indexable or readable on mobile.
