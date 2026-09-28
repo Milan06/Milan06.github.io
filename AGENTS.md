@@ -56,6 +56,7 @@ src/
 │                             # constants shared by the React + static navs)
 └── pages/
 public/                      # resume PDF, images, favicon
+scripts/                     # CI helpers, e.g. smoke-test.mjs (post-deploy crawl)
 ```
 
 Adding a new page? See `docs/adding-a-page.md` first — covers the

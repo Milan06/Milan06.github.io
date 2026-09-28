@@ -24,7 +24,7 @@ something is wrong.
 
 | File | Trigger | What it does |
 |---|---|---|
-| `.github/workflows/deploy.yml` | push to `main`, manual | Builds and publishes to GitHub Pages |
+| `.github/workflows/deploy.yml` | push to `main`, manual | Builds, publishes to GitHub Pages, then smoke-tests the live site |
 | `.github/workflows/build-check.yml` | pull requests to `main` | Builds only. Never touches Pages |
 
 They're deliberately separate. `deploy.yml` holds `pages: write` and
@@ -137,8 +137,17 @@ GitHub-side — runner availability or Actions minutes. It appeared once, on
 2026-08-06, and did not recur. Re-run it; if it persists, check billing rather
 than the workflow.
 
-**Green run, but the page looks wrong.** Remember that a `200` proves the
-server responded, not that the page rendered — see the Vite cache section in
+**`smoke-test` red, `deploy` green.** The site is live but something on it
+is broken. The job crawls every page from `/` and requests each internal
+link and asset, including the résumé PDF and the room's JS bundle. The log lists
+each URL that didn't return 200, usually a file that was renamed or deleted
+while something still points to it. Fix the link or restore the file, and
+the next deploy will turn it green. Run the same check locally with
+`node scripts/smoke-test.mjs` (live site) or pass a URL, for example
+`http://localhost:4321`.
+
+**Green run, but the page looks wrong.** The smoke test only proves every URL
+responds with a `200`, not that the page rendered — see the Vite cache section in
 `AGENTS.md`. Open it in a browser.
 
 ## Things that are easy to get wrong
