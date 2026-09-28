@@ -25,6 +25,12 @@ interface ProjectHotspotProps {
 	isHovered: boolean;
 	onHoverStart: () => void;
 	onHoverEnd: () => void;
+	/** The walking character is standing at this object, so Enter will select it. */
+	showEnterHint?: boolean;
+	/** The link/button a click lands on — the room clicks it when Enter is pressed. */
+	triggerRef?: (element: HTMLElement | null) => void;
+	/** So the room can freeze the character while the modal is up. */
+	onOpenChange?: (isOpen: boolean) => void;
 }
 
 export default function ProjectHotspot({
@@ -39,8 +45,15 @@ export default function ProjectHotspot({
 	isHovered,
 	onHoverStart,
 	onHoverEnd,
+	showEnterHint,
+	triggerRef,
+	onOpenChange,
 }: ProjectHotspotProps) {
 	const [isOpen, setIsOpen] = useState(false);
+
+	useEffect(() => {
+		onOpenChange?.(isOpen);
+	}, [isOpen]);
 
 	useEffect(() => {
 		if (!isOpen) return;
@@ -62,6 +75,7 @@ export default function ProjectHotspot({
 		<>
 			{href ? (
 				<a
+					ref={triggerRef}
 					href={href}
 					aria-label={subtitle ? `${title} — ${subtitle}` : title}
 					className="absolute cursor-pointer"
@@ -73,6 +87,7 @@ export default function ProjectHotspot({
 				/>
 			) : (
 				<button
+					ref={triggerRef}
 					type="button"
 					aria-label={subtitle ? `${title} — ${subtitle}` : title}
 					aria-haspopup="dialog"
@@ -93,11 +108,12 @@ export default function ProjectHotspot({
 
 			{isHovered && !isOpen && (
 				<div
-					className="pointer-events-none absolute -translate-x-1/2 -translate-y-full whitespace-nowrap rounded bg-black/80 px-2 py-1 text-center font-mono text-xs text-white"
+					className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded bg-black/80 px-2 py-1 text-center font-mono text-xs text-white"
 					style={{ left: `${region.left + region.width / 2}%`, top: `${region.top}%` }}
 				>
 					<div className="font-bold">"{title}"</div>
 					{subtitle && <div>{subtitle}</div>}
+					{showEnterHint && <div className="text-neutral-400">Press ↵ Enter</div>}
 				</div>
 			)}
 

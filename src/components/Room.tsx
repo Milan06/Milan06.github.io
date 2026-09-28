@@ -1,6 +1,8 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import ProjectHotspot from './ProjectHotspot';
 import LightSwitch from './LightSwitch';
+import Character from './Character';
+import { useWalkingCharacter } from './useWalkingCharacter';
 import {
 	NAV_CONTAINER_CLASS,
 	NAV_ENTRIES,
@@ -11,6 +13,15 @@ import {
 	opensInNewTab,
 } from '../lib/nav';
 import { shouldSkipStartScreen } from '../lib/startGate';
+import { zoneAt } from '../lib/roomPhysics';
+import { BLOCKERS, FLOOR, REACH_ZONES, SPAWN } from '../lib/roomMap';
+
+const LIGHT_SWITCH_ID = 'light-switch';
+
+// Enter on one of these belongs to it (the browser clicks it), not to the character.
+function isFocusedControl(element: Element | null) {
+	return element instanceof HTMLElement && element !== document.body && element.matches('a, button, input, select, textarea');
+}
 
 interface Region {
 	left: number;
@@ -48,6 +59,50 @@ export default function Room({ roomSrc, roomNightSrc, roomWidth, roomHeight, hot
 	const [started, setStarted] = useState(false);
 	const [hoveredId, setHoveredId] = useState<string | null>(null);
 	const [isNight, setIsNight] = useState(false);
+	const [openModalCount, setOpenModalCount] = useState(0);
+
+	const { position, facing } = useWalkingCharacter({
+		enabled: started,
+		paused: openModalCount > 0,
+		spawn: SPAWN,
+		floor: FLOOR,
+		blockers: BLOCKERS,
+	});
+
+	// The object the character is standing at. It glows just like a hovered
+	// one, but a mouse hover wins while there is one.
+	const nearId = started ? zoneAt(position, REACH_ZONES) : null;
+	const glowingId = hoveredId ?? nearId;
+
+	// Each object's own link/button, so Enter can click it and get exactly what
+	// a mouse click does — page, new tab, modal or light switch.
+	const triggers = useRef(new Map<string, HTMLElement>());
+	// One ref callback per object, reused across renders — the room re-renders
+	// every frame while the character walks, and a fresh callback each time
+	// would make React detach and reattach every ref at 60fps.
+	const triggerRefs = useRef(new Map<string, (element: HTMLElement | null) => void>());
+	const registerTrigger = (id: string) => {
+		let ref = triggerRefs.current.get(id);
+		if (!ref) {
+			ref = (element) => {
+				if (element) triggers.current.set(id, element);
+				else triggers.current.delete(id);
+			};
+			triggerRefs.current.set(id, ref);
+		}
+		return ref;
+	};
+
+	useEffect(() => {
+		if (!nearId || openModalCount > 0) return;
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key !== 'Enter' || event.repeat || isFocusedControl(document.activeElement)) return;
+			event.preventDefault();
+			triggers.current.get(nearId)?.click();
+		};
+		window.addEventListener('keydown', onKeyDown);
+		return () => window.removeEventListener('keydown', onKeyDown);
+	}, [nearId, openModalCount]);
 
 	useEffect(() => {
 		// Checked here rather than in the initial state so server and client render
@@ -131,9 +186,12 @@ export default function Room({ roomSrc, roomNightSrc, roomWidth, roomHeight, hot
 							link={hotspot.link}
 							href={hrefForHotspot(hotspot.id)}
 							newTab={opensInNewTab(hotspot.id)}
-							isHovered={hoveredId === hotspot.id}
+							isHovered={glowingId === hotspot.id}
 							onHoverStart={() => setHoveredId(hotspot.id)}
 							onHoverEnd={() => clearHover(hotspot.id)}
+							showEnterHint={nearId === hotspot.id}
+							triggerRef={registerTrigger(hotspot.id)}
+							onOpenChange={(isOpen) => setOpenModalCount((count) => (isOpen ? count + 1 : Math.max(0, count - 1)))}
 						/>
 					))}
 
@@ -143,7 +201,13 @@ export default function Room({ roomSrc, roomNightSrc, roomWidth, roomHeight, hot
 						nightGlowSrc={lightSwitch.nightGlowSrc}
 						isNight={isNight}
 						onToggle={() => setIsNight((current) => !current)}
+						isNear={nearId === LIGHT_SWITCH_ID}
+						triggerRef={registerTrigger(LIGHT_SWITCH_ID)}
 					/>
+
+					{started && (
+						<Character position={position} facing={facing} roomWidth={roomWidth} roomHeight={roomHeight} />
+					)}
 				</div>
 			</main>
 		</>

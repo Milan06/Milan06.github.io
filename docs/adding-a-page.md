@@ -65,6 +65,20 @@ Worth knowing: the modal props (`description`, `link`) stay harmless once an
 `href` is set — they're simply unused, so there's nothing to clean up when a
 hotspot graduates.
 
+### The walking character
+
+Visitors can also walk a character around the room (arrow keys / WASD).
+Standing in an object's **reach zone** glows it like a hover, and Enter clicks
+its link or button — so it follows the same `href` fork above with no extra
+work. The layout lives in `src/lib/roomMap.ts`: the floor, furniture
+`BLOCKERS`, the spawn point, and `REACH_ZONES`, all in room-image pixels.
+
+**Adding a new room object means adding a reach zone** keyed by its hotspot
+`id`, or the character can never select it. A zone is the patch of floor in
+front of the object, not the object itself — things on the desk are behind
+the desk's edge. Zones mustn't overlap. Moving furniture in the art means
+re-tracing its blocker.
+
 ## 4. Nav pill: shared styling, two implementations
 
 The pill nav at the top looks identical everywhere, but it's implemented
