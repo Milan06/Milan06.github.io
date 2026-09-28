@@ -12,7 +12,9 @@ personal account. Full spec in `SPEC.md`, epics/stories in `BACKLOG.md`.
   tailwind` — not the legacy `@astrojs/tailwind` integration).
 - MDX for blog posts and project case studies.
 - React island: the interactive home-page room (`Room.tsx` +
-  `ProjectHotspot`/`LightSwitch`), hydrated via `client:load` — see Epic 5 in
+  `ProjectHotspot`/`LightSwitch`, plus the arrow-key/WASD `Character` —
+  layout and collision in `src/lib/roomMap.ts` / `roomPhysics.ts`), hydrated
+  via `client:load` — see Epic 5 in
   BACKLOG.md. ADR (story 5.1) still outstanding.
 - Deploy: GitHub Actions (`withastro/action` + `actions/deploy-pages`) →
   GitHub Pages.

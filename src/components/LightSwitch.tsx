@@ -13,10 +13,23 @@ interface LightSwitchProps {
 	nightGlowSrc: string;
 	isNight: boolean;
 	onToggle: () => void;
+	/** The walking character is standing at the switch: glow it, and hint that Enter flips it. */
+	isNear?: boolean;
+	/** The switch's button — the room clicks it when Enter is pressed. */
+	triggerRef?: (element: HTMLElement | null) => void;
 }
 
-export default function LightSwitch({ region, dayGlowSrc, nightGlowSrc, isNight, onToggle }: LightSwitchProps) {
+export default function LightSwitch({
+	region,
+	dayGlowSrc,
+	nightGlowSrc,
+	isNight,
+	onToggle,
+	isNear,
+	triggerRef,
+}: LightSwitchProps) {
 	const [isHovered, setIsHovered] = useState(false);
+	const isLit = isHovered || isNear;
 
 	const regionStyle = {
 		left: `${region.left}%`,
@@ -28,6 +41,7 @@ export default function LightSwitch({ region, dayGlowSrc, nightGlowSrc, isNight,
 	return (
 		<>
 			<button
+				ref={triggerRef}
 				type="button"
 				aria-label="Light switch"
 				className="absolute cursor-pointer"
@@ -41,15 +55,16 @@ export default function LightSwitch({ region, dayGlowSrc, nightGlowSrc, isNight,
 				src={isNight ? nightGlowSrc : dayGlowSrc}
 				alt=""
 				className="pointer-events-none absolute inset-0 h-full w-full [image-rendering:pixelated] transition-opacity duration-150"
-				style={{ opacity: isHovered ? 1 : 0 }}
+				style={{ opacity: isLit ? 1 : 0 }}
 			/>
 
-			{isHovered && (
+			{isLit && (
 				<div
-					className="pointer-events-none absolute -translate-x-1/2 -translate-y-full whitespace-nowrap rounded bg-black/80 px-2 py-1 text-center font-mono text-xs text-white"
+					className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded bg-black/80 px-2 py-1 text-center font-mono text-xs text-white"
 					style={{ left: `${region.left + region.width / 2}%`, top: `${region.top}%` }}
 				>
 					Light Switch
+					{isNear && <div className="text-neutral-400">Press ↵ Enter</div>}
 				</div>
 			)}
 		</>
