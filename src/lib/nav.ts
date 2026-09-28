@@ -58,7 +58,7 @@ export const NAV_ENTRIES: NavEntry[] = [
 	// the room object and the asset filename. The PDF filename stays ASCII too:
 	// it becomes the visitor's downloaded filename, and accents in a URL encode
 	// into noise.
-	{ label: 'Résumé', href: '/milan-patel-resume.pdf', hotspotId: 'resume', newTab: true },
+	{ label: 'Résumé', href: '/Milan_Patel_Resume.pdf', hotspotId: 'resume', newTab: true },
 	{ label: 'About Me', href: '/about-me', hotspotId: 'about-me' },
 	{ label: 'Blog Post', href: '/blog', hotspotId: 'blog-post' },
 ];
