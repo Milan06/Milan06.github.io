@@ -20,12 +20,17 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+      # withastro/action only takes node-version, not a file, so read the
+      # version from .nvmrc — the one place it's set.
+      - name: Read Node version
+        id: node
+        run: echo "version=$(cat .nvmrc)" >> "$GITHUB_OUTPUT"
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
           # Runners default to Node 20, which Astro refuses (package.json
           # requires >=22.12.0) — without this the build fails outright.
-          node-version: 22
+          node-version: ${{ steps.node.outputs.version }}
 
   deploy:
     needs: build

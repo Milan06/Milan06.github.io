@@ -64,7 +64,7 @@ don't, the hotspot modal-vs-link convention, and the shared nav styling
 approach.
 
 Deploying, or a deploy went red? See `docs/deploying.md` — covers the two
-workflows and why they're separate, the Node 22 pin both of them depend on,
+workflows and why they're separate, the Node pin (in `.nvmrc`) both of them depend on,
 how to watch and trigger runs, rolling back, and how to tell a build failure
 from a Pages failure from a GitHub-side flake.
 

@@ -26,14 +26,19 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          # Keep in step with node-version in deploy.yml. Astro refuses
+          # .nvmrc is the one place the Node version lives. Astro refuses
           # anything below the >=22.12.0 in package.json, and a runner
           # defaults to 20 — see issue #42.
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install
         run: npm ci
+
+      # Type-checks .astro/.ts/.tsx files, and (once #64 lands) content
+      # collection schemas, which a plain build doesn't fully cover.
+      - name: Type check
+        run: npx astro check
 
       - name: Build
         run: npm run build
