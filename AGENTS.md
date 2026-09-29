@@ -15,7 +15,7 @@ personal account. Full spec in `SPEC.md`, epics/stories in `BACKLOG.md`.
   `ProjectHotspot`/`LightSwitch`, plus the arrow-key/WASD `Character` —
   layout and collision in `src/lib/roomMap.ts` / `roomPhysics.ts`), hydrated
   via `client:load` — see Epic 5 in
-  BACKLOG.md. ADR (story 5.1) still outstanding.
+  BACKLOG.md. Why the room, and why `client:load`: `docs/adr-001-react-island.md`.
 - Deploy: GitHub Actions (`withastro/action` + `actions/deploy-pages`) →
   GitHub Pages.
 
