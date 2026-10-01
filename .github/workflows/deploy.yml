@@ -19,14 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout your repository using git
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       # withastro/action only takes node-version, not a file, so read the
       # version from .nvmrc — the one place it's set.
       - name: Read Node version
         id: node
         run: echo "version=$(cat .nvmrc)" >> "$GITHUB_OUTPUT"
       - name: Install, build, and upload your site
-        uses: withastro/action@v3
+        uses: withastro/action@v6
         with:
           # Runners default to Node 20, which Astro refuses (package.json
           # requires >=22.12.0) — without this the build fails outright.
@@ -43,7 +43,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   # A green deploy only means Pages accepted the upload. This crawls the live
   # site and fails if any page, link or asset doesn't return 200 — see #91.
@@ -53,9 +53,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
       - name: Crawl the live site
